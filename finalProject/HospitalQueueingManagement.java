@@ -1,67 +1,62 @@
 import java.util.*;
 
-public class HospitalQueueingManagement {
-    static HashMap<String, List<String>> map = new HashMap<>();
-    static HashMap<String, Integer> queueMap = new HashMap<>();
-    static Queue<String> hospitalQueue = new LinkedList<>();
+public class HospitalQueueingManagement extends AbstractClass {
+    HashMap<String, List<String>> map = new HashMap<>();
+    HashMap<String, Integer> queueMap = new HashMap<>();
+    Queue<String> hospitalQueue = new LinkedList<>();
 
-    public static void main(String[] _dreamymc) {
+    public void addPatient() {
         Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.print("Patient's name: ");
-            String name = sc.nextLine();
-            System.out.print("Patient's age: ");
-            int age = sc.nextInt();
-            sc.nextLine();
-            System.out.print("Patient's Medical History: ");
-            String history = sc.nextLine();
-            System.out.println("10]Cardiac Arrest");
-            System.out.println("9] Stroke");
-            System.out.println("8] Severe Trauma");
-            System.out.println("7] Respiratory Failure");
-            System.out.println("6] Severe Bleeding");
-            System.out.println("5] Heart Attack");
-            System.out.println("4] Poisoning");
-            System.out.println("3] Severe Allergic Reactions");
-            System.out.println("2] Sepsis");
-            System.out.println("1] Status Epilepticus");
-            System.out.print("Choose the medical condition of the patient: ");
-            int medCondition = sc.nextInt();
+        System.out.print("Patient's name: ");
+        String name = sc.nextLine();
+        System.out.print("Patient's age: ");
+        int age = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Patient's Medical History: ");
+        String history = sc.nextLine();
+        System.out.println("10]Cardiac Arrest");
+        System.out.println("9] Stroke");
+        System.out.println("8] Severe Trauma");
+        System.out.println("7] Respiratory Failure");
+        System.out.println("6] Severe Bleeding");
+        System.out.println("5] Heart Attack");
+        System.out.println("4] Poisoning");
+        System.out.println("3] Severe Allergic Reactions");
+        System.out.println("2] Sepsis");
+        System.out.println("1] Status Epilepticus");
+        System.out.print("Choose the medical condition of the patient: ");
+        int medCondition = sc.nextInt();
 
-            System.out.println("4] Catastrophic"
-                    + "\n3] Critical"
-                    + "\n2] Serious"
-                    + "\n1] Mild");
-            System.out.print("Choose the severity: ");
-            int severity = sc.nextInt();
+        System.out.println("4] Catastrophic"
+                + "\n3] Critical"
+                + "\n2] Serious"
+                + "\n1] Mild");
+        System.out.print("Choose the severity: ");
+        int severity = sc.nextInt();
 
-            int sumSeverity = medCondition + severity;
-            if (!map.containsKey(name))
-                map.put(name, new LinkedList<>());
+        int sumSeverity = medCondition + severity;
+        if (!map.containsKey(name))
+            map.put(name, new LinkedList<>());
 
-            map.get(name).add(Integer.toString(age));
-            map.get(name).add(history);
-            map.get(name).add(Integer.toString(medCondition));
-            map.get(name).add(Integer.toString(severity));
-            map.get(name).add(Integer.toString(sumSeverity));
-            queueMap.put(name, sumSeverity);
-            System.out.println(map);
-            display();
-            System.out.println("Current Patients: ");
-            for (String print : map.keySet())
-                System.out.println(print);
-            System.out.println("Priority Patients: ");
-            queueMapSorting();
-            System.out.println(hospitalQueue);
-
-            sc.nextLine();
-            System.out.print("Input patient name: "); //Search
-            searchPatient(sc.nextLine());
-        }
+        map.get(name).add(Integer.toString(age));
+        map.get(name).add(history);
+        map.get(name).add(Integer.toString(medCondition));
+        map.get(name).add(Integer.toString(severity));
+        map.get(name).add(Integer.toString(sumSeverity));
+        queueMap.put(name, sumSeverity);
+        System.out.println();
 
     }
 
-    public static void display() {
+    public void displayQueue() {
+        System.out.println("Prioritized Patients: ");
+        queueMapSorting();
+        for (String patient : hospitalQueue)
+            System.out.println(patient);
+        System.out.println();
+    }
+
+    public void displayAllPatients() {
         for (String each : map.keySet()) {
             System.out.println("\nName: " + each);
             System.out.println("Age: " + map.get(each).get(0));
@@ -69,10 +64,14 @@ public class HospitalQueueingManagement {
             System.out.println("Medical Condition: " + medCondition(Integer.parseInt(map.get(each).get(2))));
             System.out.println("Severity: " + severity(Integer.parseInt(map.get(each).get(3))));
             System.out.println("Priority Number: " + map.get(each).get(4));
+            System.out.println();
         }
     }
 
-    public static void searchPatient(String patient) {
+    public void searchPatient() {
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Search for a patient: ");
+        String patient = scan.nextLine();
         if (hospitalQueue.contains(patient))
             System.out.printf(
                     "Patient name: %s\nAge: %s\nMedical History: %s\nMedical Condition: %s\nMedical Severity: %s\n",
@@ -81,10 +80,11 @@ public class HospitalQueueingManagement {
                     severity(Integer.parseInt(map.get(patient).get(3))));
         else
             System.out.println("Patient not found.");
+        System.out.println();
 
     }
 
-    public static String medCondition(int x) {
+    public String medCondition(int x) {
         switch (x) {
             case 10:
                 return "Cardiac Arrest";
@@ -110,7 +110,7 @@ public class HospitalQueueingManagement {
         return "";
     }
 
-    public static String severity(int y) {
+    public String severity(int y) {
         switch (y) {
             case 4:
                 return "Catastrophic";
@@ -124,7 +124,7 @@ public class HospitalQueueingManagement {
         return "";
     }
 
-    public static void queueMapSorting() {
+    public void queueMapSorting() {
         LinkedList<Integer> linkedList = new LinkedList<>();
         Set<String> addedNames = new HashSet<>(); // To keep track of added names
         for (String key : queueMap.keySet())
@@ -142,7 +142,7 @@ public class HospitalQueueingManagement {
         }
     }
 
-    public static List<Integer> exchangeSort(List<Integer> arr) { // O(n^2)
+    public List<Integer> exchangeSort(List<Integer> arr) { // O(n^2)
         for (int i = 0; i < arr.size() - 1; i++)
             for (int j = i + 1; j < arr.size(); j++) {
                 if (arr.get(i) < arr.get(j)) { // Swap arr[i] and arr[j]
