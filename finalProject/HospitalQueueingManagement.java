@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class test {
+public class HospitalQueueingManagement {
     static HashMap<String, List<String>> map = new HashMap<>();
     static HashMap<String, Integer> queueMap = new HashMap<>();
     static Queue<String> hospitalQueue = new LinkedList<>();
@@ -47,8 +47,16 @@ public class test {
             queueMap.put(name, sumSeverity);
             System.out.println(map);
             display();
-            System.out.println();
+            System.out.println("Current Patients: ");
+            for (String print : map.keySet())
+                System.out.println(print);
+            System.out.println("Priority Patients: ");
+            queueMapSorting();
+            System.out.println(hospitalQueue);
+
             sc.nextLine();
+            System.out.print("Input patient name: "); //Search
+            searchPatient(sc.nextLine());
         }
 
     }
@@ -62,6 +70,18 @@ public class test {
             System.out.println("Severity: " + severity(Integer.parseInt(map.get(each).get(3))));
             System.out.println("Priority Number: " + map.get(each).get(4));
         }
+    }
+
+    public static void searchPatient(String patient) {
+        if (hospitalQueue.contains(patient))
+            System.out.printf(
+                    "Patient name: %s\nAge: %s\nMedical History: %s\nMedical Condition: %s\nMedical Severity: %s\n",
+                    patient, map.get(patient).get(0), map.get(patient).get(1),
+                    medCondition(Integer.parseInt(map.get(patient).get(2))),
+                    severity(Integer.parseInt(map.get(patient).get(3))));
+        else
+            System.out.println("Patient not found.");
+
     }
 
     public static String medCondition(int x) {
@@ -106,11 +126,20 @@ public class test {
 
     public static void queueMapSorting() {
         LinkedList<Integer> linkedList = new LinkedList<>();
+        Set<String> addedNames = new HashSet<>(); // To keep track of added names
         for (String key : queueMap.keySet())
             linkedList.add(queueMap.get(key));
         exchangeSort(linkedList);
 
-        LinkedList<HashMap<String, Integer>> sorted = new LinkedList<>();
+        // Clear and refill the hospitalQueue
+        hospitalQueue.clear();
+        for (int each : linkedList) {
+            for (String queueMapKey : queueMap.keySet()) {
+                if (each == queueMap.get(queueMapKey) && addedNames.add(queueMapKey)) {
+                    hospitalQueue.add(queueMapKey);
+                }
+            }
+        }
     }
 
     public static List<Integer> exchangeSort(List<Integer> arr) { // O(n^2)
