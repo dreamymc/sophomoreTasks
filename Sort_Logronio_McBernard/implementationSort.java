@@ -117,7 +117,7 @@ public class implementationSort extends abstractSort {
         merge(leftArray, rightArray, array);
     }
 
-    private static void merge(int[] leftArray, int[] rightArray, int[] array) {
+    private void merge(int[] leftArray, int[] rightArray, int[] array) {
         int leftSize = array.length / 2;
         int rightSize = array.length - leftSize;
         int i = 0, l = 0, r = 0; // indices
