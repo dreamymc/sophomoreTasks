@@ -1,6 +1,6 @@
 import java.util.List;
 
-abstract class AbstractClass {
+abstract class abstractFinal {
     public abstract void addPatient();
 
     public abstract void displayQueue();
@@ -17,4 +17,7 @@ abstract class AbstractClass {
 
     public abstract List<Integer> exchangeSort(List<Integer> arr);
 
+    public abstract void treatPatient();
+
+    public abstract void medicalConditionOfThePatient();
 }
